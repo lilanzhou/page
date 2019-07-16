@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>分页</title>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/zxf_page.css}"/>
+    <script th:src="@{http://www.jq22.com/jquery/jquery-1.10.2.js}"></script>
+
+
+    <script type="text/javascript" th:src="@{../js/zxf_page.js}"></script>
+</head>
+<body>
+
+<div>
+    <ul>
+
+           <tr  th:each="article:${article}">
+               <td th:text="${article.title}"></td><br>
+               <td th:text="${article.content}"></td><br>
+               <td th:text="${article.category}"></td><br>
+           </tr>
+    </ul>
+</div>
+
+<!--翻页-->
+<div class="page">
+    <p>当前第 <span th:text="${pageInfo.pageNum}"></span> 页,总 <span th:text="${pageInfo.getPageSize()}"></span> 页,共 <span
+            th:text="${pageInfo.total}"></span> 条记录</p>
+
+    <a th:if="${pageInfo.getPageNum()!=1}" th:href="@{/page(start=${pageInfo.getPageNum()-1})}">上页</a>&nbsp;&nbsp;
+    <a th:each="pageInfos:${pageInfo.navigatepageNums}">
+        <a th:href="@{/page(start=${pageInfos})}" th:text="${pageInfos}"></a>
+    </a>
+    <!--<a th:if="${not pageInfo.isIsFirstPage()}" th:href="@{/page(start=${pageInfo.getPageNum()-1})}">[上页]</a>&nbsp;&nbsp;-->
+    <a th:if="${not pageInfo.isIsLastPage()}" th:href="@{/page(start=${pageInfo.getPageNum()+1})}">下页</a>&nbsp;&nbsp;
+    <!--<a th:href="@{/page(start=${pageInfo.getPageSize()-1})}" id="max">[末页]</a>&nbsp;&nbsp;-->
+
+</div>
+<div class="zxf_pagediv"></div>
+<script type="text/javascript">
+    //翻页
+    $(".zxf_pagediv").createPage({
+        pageNum: 10,
+        current: 2,
+        backfun: function (e) {
+            //console.log(e);//回调
+        }
+    });
+</script>
+</body>
+</html>
